@@ -1,10 +1,11 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import './App.css';
+import Todo from './todos/todo/todo';
 
 const logo = require('./logo.svg') as string;
 
 function App() {
-  const [message, setMessage] = useState(null);
+  const [message, setMessage] = useState('');
   const [isFetching, setIsFetching] = useState(false);
   const [url, setUrl] = useState('/api');
 
