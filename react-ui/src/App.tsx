@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import logo from './logo.svg';
 import './App.css';
+
+const logo = require('./logo.svg') as string;
 
 function App() {
   const [message, setMessage] = useState(null);
@@ -60,6 +61,8 @@ function App() {
         >
           Learn React
         </a></p>
+        <Todo title="Test1"/>
+        <Todo title="Test2"/>
       </header>
     </div>
   );
