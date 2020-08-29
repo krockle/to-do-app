@@ -1,29 +1,30 @@
-import React, { useCallback, useEffect, useState } from 'react';
-import './App.css';
-import Todo from './todos/todo/todo';
+import React, { useCallback, useEffect, useState } from "react";
+import "./App.css";
+import Todo, { TodoStatus, TodoProps } from "./todos/todo/todo";
 
-const logo = require('./logo.svg') as string;
+const logo = require("./logo.svg") as string;
 
 function App() {
-  const [message, setMessage] = useState('');
+  const [message, setMessage] = useState("");
   const [isFetching, setIsFetching] = useState(false);
-  const [url, setUrl] = useState('/api');
+  const [url, setUrl] = useState("/api");
 
   const fetchData = useCallback(() => {
     fetch(url)
-      .then(response => {
+      .then((response) => {
         if (!response.ok) {
           throw new Error(`status ${response.status}`);
         }
         return response.json();
       })
-      .then(json => {
+      .then((json) => {
         setMessage(json.message);
         setIsFetching(false);
-      }).catch(e => {
+      })
+      .catch((e) => {
         setMessage(`API call failed: ${e}`);
         setIsFetching(false);
-      })
+      });
   }, [url]);
 
   useEffect(() => {
@@ -31,43 +32,26 @@ function App() {
     fetchData();
   }, [fetchData]);
 
+  const todoProps: TodoProps[] = [
+    {todoId: 1, title: 'test1', description: '', createdUtc: new Date(), dueUtc: undefined, children: [], status: TodoStatus.ARCHIVED},
+    {todoId: 2, title: 'test2', description: '', createdUtc: new Date(), dueUtc: undefined, children: [], status: TodoStatus.COMPLETE},
+    {todoId: 3, title: 'test3', description: '', createdUtc: new Date(), dueUtc: undefined, children: [], status: TodoStatus.INCOMPLETE}
+  ]
+
+  const todos = todoProps.map((todo) => 
+    <li>
+      <Todo 
+        key={todo.todoId} 
+        {...todo} />
+    </li>)
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        { process.env.NODE_ENV === 'production' ?
-            <p>
-              This is a production build from create-react-app.
-            </p>
-          : <p>
-              Edit <code>src/App.js</code> and save to reload.
-            </p>
-        }
-        <p>{'« '}<strong>
-          {isFetching
-            ? 'Fetching message from API'
-            : message}
-        </strong>{' »'}</p>
-        <p><a
-          className="App-link"
-          href="https://github.com/mars/heroku-cra-node"
-        >
-          React + Node deployment on Heroku
-        </a></p>
-        <p><a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a></p>
-        <Todo title="Test1"/>
-        <Todo title="Test2"/>
-      </header>
+      <ul className="fa-ul">
+          {todos}
+        </ul>
     </div>
   );
-
 }
 
 export default App;
